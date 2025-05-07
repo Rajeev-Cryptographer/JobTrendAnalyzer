@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Trends Analyzer & AI Predictor</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-briefcase me-2"></i>
+                Job Trends Analyzer
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/analyze">
+                            <i class="fas fa-search me-1"></i>  Job Listings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/predict">
+                            <i class="fas fa-brain me-1"></i> AI Predictions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/heatmaps">
+                            <i class="fas fa-map-marked-alt me-1"></i> Heatmaps
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/charts">
+                            <i class="fas fa-chart-bar me-1"></i> Charts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signup">
+                            <i class="fas fa-user-plus me-1"></i> Sign Up
+                        </a>
+                    </li>
+                    <!-- Dark Mode Toggle -->
+                    <li class="nav-item ms-2">
+                        <button id="darkModeToggle" class="btn btn-sm btn-outline-light">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section animate__animated animate__fadeIn">
+        <div class="container">
+            <h1 class="animate__animated animate__fadeInDown">Job Trends Analyzer & AI Predictor</h1>
+            <p class="animate__animated animate__fadeInUp">Scrape job listings, analyze trends, and get AI-powered predictions for the future job market.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Status Message Area -->
+        <div id="status-message" class="mb-4"></div>
+
+        <!-- Action Cards Row -->
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <div class="card h-100 animate__animated animate__fadeInLeft">
+                    <div class="card-body text-center py-5">
+                        <img src="https://images.unsplash.com/photo-1611262588019-db6cc2032da3" alt="Job Search Illustration" class="illustration mb-4" style="max-height: 200px;">
+                        <h3 class="card-title mb-4">Scrape Job Data</h3>
+                        <p class="card-text mb-4">Collect job listings from Internshala and Remotive to analyze the current job market trends.</p>
+                        <div class="d-grid gap-2">
+                            <button id="scrape-button" class="btn btn-primary mb-2 pulse-animation">
+                                <i class="fas fa-spider me-2"></i>Scrape Internshala Jobs
+                            </button>
+                            <button id="fetch-button" class="btn btn-outline-primary">
+                                <i class="fas fa-cloud-download-alt me-2"></i>Fetch Remotive Jobs
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 animate__animated animate__fadeInRight">
+                    <div class="card-body text-center py-5">
+                        <img src="https://images.unsplash.com/photo-1526628953301-3e589a6a8b74" alt="Data Analysis Charts" class="illustration mb-4" style="max-height: 200px;">
+                        <h3 class="card-title mb-4">Analyze & Predict</h3>
+                        <p class="card-text mb-4">Explore job listings, visualize trends with heatmaps, and get AI predictions about future job market trends.</p>
+                        <div class="d-grid gap-2">
+                            <a href="/analyze" id="analyze-button" class="btn btn-primary mb-2">
+                                <i class="fas fa-search me-2"></i>Analyze Jobs
+                            </a>
+                            <a href="/predict" id="predict-button" class="btn btn-outline-primary">
+                                <i class="fas fa-brain me-2"></i>Get AI Predictions
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Row -->
+        <h2 class="text-center mb-4 animate__animated animate__fadeIn">Powerful Features</h2>
+        <div class="row mb-5">
+            <div class="col-md-4 mb-4">
+                <div class="card feature-card h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h4>Search & Filter</h4>
+                        <p>Search jobs by keyword and filter by location, salary range, and company.</p>
+                        <a href="/analyze" class="btn btn-sm btn-outline-primary mt-2">
+                            Explore Jobs
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card feature-card h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h4>Location Heatmaps</h4>
+                        <p>Visualize job distribution across India and globally with interactive heatmaps.</p>
+                        <a href="/heatmaps" id="heatmap-button" class="btn btn-sm btn-outline-primary mt-2">
+                            View Heatmaps
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card feature-card h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <h4>Skill Word Cloud</h4>
+                        <p>Discover the most in-demand skills with our interactive skill frequency visualization.</p>
+                        <a href="/wordcloud" id="wordcloud-button" class="btn btn-sm btn-outline-primary mt-2">
+                            View Word Cloud
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Prediction Section -->
+        <div class="row mb-5 animate__animated animate__fadeIn" style="animation-delay: 0.4s">
+            <div class="col-lg-6 mb-4">
+                <img src="https://images.unsplash.com/photo-1542744173-05336fcc7ad4" alt="Data Analysis" class="img-fluid rounded">
+            </div>
+            <div class="col-lg-6">
+                <h2>AI-Powered Job Market Predictions</h2>
+                <p class="mb-4">
+                    Our application uses the Google Gemini API to analyze job data and predict future job market trends. 
+                    Get insights about emerging skills and career opportunities for the next 5 years.
+                </p>
+                <div class="d-grid gap-2 d-md-flex">
+                    <a href="/predict" class="btn btn-primary">
+                        <i class="fas fa-brain me-2"></i>Get AI Predictions
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Download Section -->
+        <div class="card mb-5 animate__animated animate__fadeIn" style="animation-delay: 0.5s">
+            <div class="card-header">
+                <h3 class="mb-0">Download Job Data</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8 mb-3 mb-md-0">
+                        <p class="mb-0">Download the job data in CSV format for your own analysis or reference.</p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="downloadDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-download me-2"></i> Download CSV
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="downloadDropdown">
+                                <li><a class="dropdown-item" href="/download/internshala">Internshala Jobs</a></li>
+                                <li><a class="dropdown-item" href="/download/remotive">Remotive Jobs</a></li>
+                                <li><a class="dropdown-item" href="/download/combined">Combined Dataset</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <h2 class="text-center mb-4 animate__animated animate__fadeIn" style="animation-delay: 0.6s">How It Works</h2>
+        <div class="row mb-5">
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.7s">
+                    <div class="card-body text-center">
+                        <div class="display-4 mb-3 text-primary">1</div>
+                        <h5>Scrape Job Data</h5>
+                        <p>We collect job listings from Internshala and Remotive API</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.8s">
+                    <div class="card-body text-center">
+                        <div class="display-4 mb-3 text-primary">2</div>
+                        <h5>Analyze Trends</h5>
+                        <p>Search, sort, and filter jobs to discover patterns</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.9s">
+                    <div class="card-body text-center">
+                        <div class="display-4 mb-3 text-primary">3</div>
+                        <h5>Visualize Data</h5>
+                        <p>See job distribution with heatmaps and word clouds</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 animate__animated animate__fadeInUp" style="animation-delay: 1s">
+                    <div class="card-body text-center">
+                        <div class="display-4 mb-3 text-primary">4</div>
+                        <h5>AI Predictions</h5>
+                        <p>Get insights about future job market trends</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">
+                <i class="fas fa-code"></i> Job Trends Analyzer & AI Predictor
+                <span class="mx-2">|</span>
+                <i class="fas fa-chart-bar"></i> Analyze job market trends with AI-powered insights
+            </p>
+            <div class="mt-3">
+                <a href="/" class="text-decoration-none me-3">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="/analyze" class="text-decoration-none me-3">
+                    <i class="fas fa-search"></i> Analyze
+                </a>
+                <a href="/predict" class="text-decoration-none me-3">
+                    <i class="fas fa-brain"></i> Predict
+                </a>
+                <a href="/heatmaps" class="text-decoration-none me-3">
+                    <i class="fas fa-map-marked-alt"></i> Maps
+                </a>
+                <a href="/wordcloud" class="text-decoration-none">
+                    <i class="fas fa-cloud"></i> Skills
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div id="loader-container" class="loader-container">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup dark mode
+            setupDarkMode();
+            
+            // Initialize tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Show loader during ajax requests
+            const loader = document.getElementById('loader-container');
+            
+            // Add event listeners to scrape and fetch buttons
+            const scrapeButton = document.getElementById('scrape-button');
+            if (scrapeButton) {
+                scrapeButton.addEventListener('click', function() {
+                    scrapeJobs();
+                });
+            }
+        
+            const fetchButton = document.getElementById('fetch-button');
+            if (fetchButton) {
+                fetchButton.addEventListener('click', function() {
+                    fetchJobs();
+                });
+            }
+            
+            // Function to scrape Internshala jobs
+            function scrapeJobs() {
+                showLoader();
+                
+                // Update UI to show we're working
+                const statusArea = document.getElementById('status-message');
+                if (statusArea) {
+                    statusArea.innerHTML = `
+                        <div class="alert alert-info animate__animated animate__fadeIn" role="alert">
+                            <i class="fas fa-spinner fa-spin"></i> Scraping Internshala jobs... This may take a minute.
+                        </div>
+                    `;
+                }
+                
+                // Send AJAX request to scrape endpoint
+                fetch('/scrape', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoader();
+                    
+                    if (data.success) {
+                        if (statusArea) {
+                            statusArea.innerHTML = `
+                                <div class="alert alert-success animate__animated animate__fadeIn" role="alert">
+                                    <i class="fas fa-check-circle"></i> Successfully scraped ${data.count} jobs from Internshala!
+                                </div>
+                            `;
+                        }
+                        
+                        // Enable all feature buttons
+                        enableButtons();
+                    } else {
+                        if (statusArea) {
+                            statusArea.innerHTML = `
+                                <div class="alert alert-danger animate__animated animate__fadeIn" role="alert">
+                                    <i class="fas fa-exclamation-circle"></i> Failed to scrape jobs: ${data.error}
+                                </div>
+                            `;
+                        }
+                    }
+                })
+                .catch(error => {
+                    hideLoader();
+                    console.error('Error:', error);
+                    
+                    if (statusArea) {
+                        statusArea.innerHTML = `
+                            <div class="alert alert-danger animate__animated animate__fadeIn" role="alert">
+                                <i class="fas fa-exclamation-circle"></i> An error occurred while scraping: ${error.message}
+                            </div>
+                        `;
+                    }
+                });
+            }
+        
+            // Function to fetch Remotive jobs
+            function fetchJobs() {
+                showLoader();
+                
+                // Update UI to show we're working
+                const statusArea = document.getElementById('status-message');
+                if (statusArea) {
+                    statusArea.innerHTML = `
+                        <div class="alert alert-info animate__animated animate__fadeIn" role="alert">
+                            <i class="fas fa-spinner fa-spin"></i> Fetching jobs from Remotive API... Please wait.
+                        </div>
+                    `;
+                }
+                
+                // Send AJAX request to fetch endpoint
+                fetch('/fetch', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoader();
+                    
+                    if (data.success) {
+                        if (statusArea) {
+                            statusArea.innerHTML = `
+                                <div class="alert alert-success animate__animated animate__fadeIn" role="alert">
+                                    <i class="fas fa-check-circle"></i> Successfully fetched ${data.count} jobs from Remotive API!
+                                </div>
+                            `;
+                        }
+                        
+                        // Enable all feature buttons
+                        enableButtons();
+                    } else {
+                        if (statusArea) {
+                            statusArea.innerHTML = `
+                                <div class="alert alert-danger animate__animated animate__fadeIn" role="alert">
+                                    <i class="fas fa-exclamation-circle"></i> Failed to fetch jobs: ${data.error}
+                                </div>
+                            `;
+                        }
+                    }
+                })
+                .catch(error => {
+                    hideLoader();
+                    console.error('Error:', error);
+                    
+                    if (statusArea) {
+                        statusArea.innerHTML = `
+                            <div class="alert alert-danger animate__animated animate__fadeIn" role="alert">
+                                <i class="fas fa-exclamation-circle"></i> An error occurred while fetching: ${error.message}
+                            </div>
+                        `;
+                    }
+                });
+            }
+            
+            // Function to enable analyze button
+            function enableButtons() {
+                const analyzeBtn = document.getElementById('analyze-button');
+                const predictBtn = document.getElementById('predict-button');
+                const heatmapBtn = document.getElementById('heatmap-button');
+                const wordcloudBtn = document.getElementById('wordcloud-button');
+                
+                if (analyzeBtn) analyzeBtn.classList.remove('disabled');
+                if (predictBtn) predictBtn.classList.remove('disabled');
+                if (heatmapBtn) heatmapBtn.classList.remove('disabled');
+                if (wordcloudBtn) wordcloudBtn.classList.remove('disabled');
+            }
+        
+            // Helper functions for loader
+            function showLoader() {
+                if (loader) {
+                    loader.style.display = 'flex';
+                }
+            }
+        
+            function hideLoader() {
+                if (loader) {
+                    loader.style.display = 'none';
+                }
+            }
+            
+            // Setup dark mode
+            function setupDarkMode() {
+                const darkModeToggle = document.getElementById('darkModeToggle');
+                const body = document.body;
+                
+                // Check for saved dark mode preference
+                const darkMode = localStorage.getItem('darkMode') === 'true';
+                
+                // Apply initial dark mode setting
+                if (darkMode) {
+                    body.classList.add('dark-mode');
+                    darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+                
+                // Toggle dark mode on click
+                darkModeToggle.addEventListener('click', function() {
+                    body.classList.toggle('dark-mode');
+                    const isDarkMode = body.classList.contains('dark-mode');
+                    
+                    // Update button icon
+                    darkModeToggle.innerHTML = isDarkMode ? 
+                        '<i class="fas fa-sun"></i>' : 
+                        '<i class="fas fa-moon"></i>';
+                    
+                    // Save preference
+                    localStorage.setItem('darkMode', isDarkMode);
+                });
+            }
+        });
+    </script>
+    
+    <!-- Extra animation CSS -->
+    <style>
+        /* Pulse animation for buttons */
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(67, 97, 238, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(67, 97, 238, 0);
+            }
+        }
+        
+        /* Additional animations */
+        .feature-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2);
+        }
+        
+        .btn {
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</body>
+</html>

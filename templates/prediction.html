@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Job Market Predictions - Job Trends Analyzer</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-briefcase me-2"></i>
+                Job Trends Analyzer
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/analyze">
+                            <i class="fas fa-search me-1"></i> Job listings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/predict">
+                            <i class="fas fa-brain me-1"></i> AI Predictions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/heatmaps">
+                            <i class="fas fa-map-marked-alt me-1"></i> Heatmaps
+                        </a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="/wordcloud">
+                            <i class="fas fa-cloud me-1"></i> Skill Cloud
+                        </a>
+                    </li> -->
+                </ul>
+                <button id="darkModeToggle" class="btn btn-outline-light ms-2">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4 mt-4 animate__animated animate__fadeIn">
+            <h1>AI-Powered Job Market Predictions</h1>
+            <div>
+                <a href="/" class="btn btn-outline-primary">
+                    <i class="fas fa-home me-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+        
+        <!-- Error Message -->
+        <div id="error-message" class="alert alert-danger d-none" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i><span id="error-text"></span>
+        </div>
+
+        <!-- Prediction Loading -->
+        <div id="prediction-loading" class="text-center py-5 animate__animated animate__fadeIn">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Generating AI predictions based on job market data...</p>
+            <p class="text-muted">This might take a moment as we analyze the latest trends.</p>
+        </div>
+        
+        <!-- Prediction Error -->
+        <div id="prediction-error" class="alert alert-info text-center py-5 d-none" role="alert">
+            <i class="fas fa-info-circle fa-3x mb-3"></i>
+            <h4 id="error-title">No Prediction Available</h4>
+            <p id="error-description">We need job data and an API key to generate predictions. Please scrape jobs first and check that the Gemini API key is configured.</p>
+            <a href="/" class="btn btn-primary mt-3">
+                <i class="fas fa-home me-2"></i>Back to Home
+            </a>
+        </div>
+
+        <!-- Prediction Results -->
+        <div id="prediction-results" class="d-none">
+            <!-- Introduction Card -->
+            <div class="card mb-4 animate__animated animate__fadeIn">
+                <div class="card-header">
+                    <h3 class="mb-0">Job Market Forecast</h3>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">Based on analysis of the current job market data, our AI has generated predictions about future trends, emerging skills, and advice for job seekers. These insights can help you plan your career development and stay ahead in a competitive job market.</p>
+                </div>
+            </div>
+            
+            <!-- Prediction Content -->
+            <div id="prediction-content">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+            
+            <!-- AI Notice -->
+            <div class="alert alert-secondary mt-4 animate__animated animate__fadeIn" style="animation-delay: 0.6s">
+                <div class="d-flex">
+                    <div class="me-3">
+                        <i class="fas fa-robot fa-2x"></i>
+                    </div>
+                    <div>
+                        <h5>AI-Generated Content</h5>
+                        <p class="mb-0">This prediction was generated by Google's Gemini AI based on job market data. While it provides valuable insights, the job market is dynamic and subject to rapid changes. Consider these predictions alongside other career research.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Methodology -->
+        <div class="card mb-4 mt-5 animate__animated animate__fadeIn" style="animation-delay: 0.5s">
+            <div class="card-header">
+                <h3 class="mb-0">Prediction Methodology</h3>
+            </div>
+            <div class="card-body">
+                <p>Our AI-powered predictions are generated using the following methodology:</p>
+                <ol>
+                    <li>We analyze job listings from multiple sources including Internshala and Remotive</li>
+                    <li>We extract and quantify key information such as job titles, required skills, and location data</li>
+                    <li>This data is processed using statistical analysis to identify patterns and trends</li>
+                    <li>Google's Gemini AI analyzes these patterns to project future job market trends</li>
+                    <li>The AI considers current market dynamics, emerging technologies, and historical patterns</li>
+                </ol>
+                <p>This approach provides data-driven insights that can help guide your career planning and skill development efforts.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">
+                <i class="fas fa-code"></i> Job Trends Analyzer & AI Predictor
+                <span class="mx-2">|</span>
+                <i class="fas fa-chart-bar"></i> Analyze job market trends with AI-powered insights
+            </p>
+            <div class="mt-3">
+                <a href="/" class="text-decoration-none me-3">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="/analyze" class="text-decoration-none me-3">
+                    <i class="fas fa-search"></i> Analyze
+                </a>
+                <a href="/predict" class="text-decoration-none me-3">
+                    <i class="fas fa-brain"></i> Predict
+                </a>
+                <a href="/heatmaps" class="text-decoration-none me-3">
+                    <i class="fas fa-map-marked-alt"></i> Maps
+                </a>
+                <a href="/wordcloud" class="text-decoration-none">
+                    <i class="fas fa-cloud"></i> Skills
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div id="loader-container" class="loader-container">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Dark Mode Toggle
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                body.classList.add('dark-mode');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            // Dark mode toggle event listener
+            darkModeToggle.addEventListener('click', function() {
+                if (body.classList.contains('dark-mode')) {
+                    body.classList.remove('dark-mode');
+                    darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    localStorage.setItem('darkMode', 'disabled');
+                } else {
+                    body.classList.add('dark-mode');
+                    darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    localStorage.setItem('darkMode', 'enabled');
+                }
+            });
+            
+            // DOM Elements
+            const loader = document.getElementById('loader-container');
+            const predictionLoading = document.getElementById('prediction-loading');
+            const predictionError = document.getElementById('prediction-error');
+            const errorTitle = document.getElementById('error-title');
+            const errorDescription = document.getElementById('error-description');
+            const predictionResults = document.getElementById('prediction-results');
+            const predictionContent = document.getElementById('prediction-content');
+            const errorMessage = document.getElementById('error-message');
+            const errorText = document.getElementById('error-text');
+            
+            // Fetch prediction
+            fetchPrediction();
+            
+            function fetchPrediction() {
+                showLoader();
+                
+                fetch('/api/prediction')
+                    .then(response => response.json())
+                    .then(data => {
+                        hideLoader();
+                        predictionLoading.style.display = 'none';
+                        
+                        if (data.error) {
+                            showPredictionError(data.error);
+                            return;
+                        }
+                        
+                        if (data.prediction) {
+                            predictionResults.classList.remove('d-none');
+                            renderPrediction(data.prediction);
+                        } else {
+                            showPredictionError('No prediction data available');
+                        }
+                    })
+                    .catch(error => {
+                        hideLoader();
+                        predictionLoading.style.display = 'none';
+                        showPredictionError('Failed to get prediction: ' + error.message);
+                        console.error('Error:', error);
+                    });
+            }
+            
+            // Render prediction content
+            function renderPrediction(prediction) {
+                // Convert markdown to HTML
+                const html = marked.parse(prediction);
+                
+                // Create sections based on the prediction content
+                const sections = html.split('<h2>').filter(section => section.trim() !== '');
+                
+                // Clear previous content
+                predictionContent.innerHTML = '';
+                
+                if (sections.length === 0) {
+                    // If no sections were found, just render the whole thing in one card
+                    createPredictionCard('AI Prediction', html);
+                } else {
+                    // Create a card for each section
+                    sections.forEach((section, index) => {
+                        // Fix the heading (we split on h2 tag, so we need to add it back)
+                        const sectionHtml = '<h2>' + section;
+                        
+                        // Extract title from first h2 tag
+                        const titleMatch = sectionHtml.match(/<h2>(.*?)<\/h2>/);
+                        const title = titleMatch ? titleMatch[1] : `Prediction Part ${index + 1}`;
+                        
+                        createPredictionCard(title, sectionHtml, index);
+                    });
+                }
+            }
+            
+            // Create a card for a prediction section
+            function createPredictionCard(title, html, index = 0) {
+                const card = document.createElement('div');
+                card.className = 'card prediction-card mb-4 animate__animated animate__fadeInUp';
+                card.style.animationDelay = `${0.2 + (index * 0.1)}s`;
+                
+                const header = document.createElement('div');
+                header.className = 'prediction-header';
+                header.innerHTML = `<h4 class="mb-0">${title}</h4>`;
+                
+                const body = document.createElement('div');
+                body.className = 'prediction-body';
+                body.innerHTML = html;
+                
+                card.appendChild(header);
+                card.appendChild(body);
+                
+                predictionContent.appendChild(card);
+            }
+            
+            // Show prediction error
+            function showPredictionError(message) {
+                predictionError.classList.remove('d-none');
+                
+                if (message.includes('API key') || message.includes('Gemini')) {
+                    errorTitle.textContent = 'API Key Required';
+                    errorDescription.textContent = 'The Gemini API key is missing or invalid. Please configure it to generate AI predictions.';
+                } else if (message.includes('job data') || message.includes('No data')) {
+                    errorTitle.textContent = 'No Job Data Available';
+                    errorDescription.textContent = 'Please go back to the homepage and scrape job data first to generate predictions.';
+                } else {
+                    errorTitle.textContent = 'Prediction Error';
+                    errorDescription.textContent = message;
+                }
+            }
+            
+            // Helper functions
+            function showError(message) {
+                errorText.textContent = message;
+                errorMessage.classList.remove('d-none');
+            }
+            
+            function hideError() {
+                errorMessage.classList.add('d-none');
+            }
+            
+            function showLoader() {
+                if (loader) {
+                    loader.style.display = 'flex';
+                }
+            }
+            
+            function hideLoader() {
+                if (loader) {
+                    loader.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

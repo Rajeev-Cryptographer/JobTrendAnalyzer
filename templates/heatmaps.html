@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Location Heatmaps - Job Trends Analyzer</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-briefcase me-2"></i>
+                Job Trends Analyzer
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/analyze">
+                            <i class="fas fa-search me-1"></i> Job Listings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/predict">
+                            <i class="fas fa-brain me-1"></i> AI Predictions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/heatmaps">
+                            <i class="fas fa-map-marked-alt me-1"></i> Heatmaps
+                        </a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="/wordcloud">
+                            <i class="fas fa-cloud me-1"></i> Skill Cloud
+                        </a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/charts">
+                            <i class="fas fa-chart-bar me-1"></i> Charts
+                        </a>
+                    </li>
+                    <!-- Dark Mode Toggle -->
+                    <li class="nav-item ms-2">
+                        <button id="darkModeToggle" class="btn btn-sm btn-outline-light">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4 mt-4 animate__animated animate__fadeIn">
+            <h1>Job Location Heatmaps</h1>
+            <div>
+                <a href="/" class="btn btn-outline-primary">
+                    <i class="fas fa-home me-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+        
+        <!-- Error Message -->
+        <div id="error-message" class="alert alert-danger d-none" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i><span id="error-text"></span>
+        </div>
+
+        <!-- Map Selection Tabs -->
+        <ul class="nav nav-tabs mb-4 animate__animated animate__fadeInDown" id="mapTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="india-tab" data-bs-toggle="tab" data-bs-target="#india-map-container" type="button" role="tab" aria-controls="india-map-container" aria-selected="true">
+                    <i class="fas fa-map-marker-alt me-2"></i>India Job Distribution
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="world-tab" data-bs-toggle="tab" data-bs-target="#world-map-container" type="button" role="tab" aria-controls="world-map-container" aria-selected="false">
+                    <i class="fas fa-globe me-2"></i>Global Remote Jobs
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="mapTabsContent">
+            <!-- India Map -->
+            <div class="tab-pane fade show active" id="india-map-container" role="tabpanel" aria-labelledby="india-tab">
+                <div class="card mb-4 animate__animated animate__fadeIn">
+                    <div class="card-header">
+                        <h3 class="mb-0">India Job Distribution</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-3">This heatmap shows the geographical distribution of jobs across different cities in India.</p>
+                        <div id="india-map-loading" class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-3">Loading India heatmap...</p>
+                        </div>
+                        <div id="india-map" class="map-container d-none"></div>
+                        <div id="india-map-error" class="alert alert-info d-none" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>No location data available for India heatmap. Please scrape Internshala jobs first.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- World Map -->
+            <div class="tab-pane fade" id="world-map-container" role="tabpanel" aria-labelledby="world-tab">
+                <div class="card mb-4 animate__animated animate__fadeIn">
+                    <div class="card-header">
+                        <h3 class="mb-0">Global Remote Job Distribution</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-3">This heatmap shows the geographical distribution of remote jobs worldwide.</p>
+                        <div id="world-map-loading" class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-3">Loading world heatmap...</p>
+                        </div>
+                        <div id="world-map" class="map-container d-none"></div>
+                        <div id="world-map-error" class="alert alert-info d-none" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>No location data available for world heatmap. Please fetch Remotive jobs first.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Explanation -->
+        <div class="card mb-4 animate__animated animate__fadeIn" style="animation-delay: 0.2s">
+            <div class="card-header">
+                <h3 class="mb-0">Understanding Job Distribution</h3>
+            </div>
+            <div class="card-body">
+                <p>The heatmaps above visualize job concentration across different geographical locations:</p>
+                <ul>
+                    <li><strong>Red/Orange areas:</strong> High concentration of job opportunities</li>
+                    <li><strong>Yellow areas:</strong> Moderate number of job postings</li>
+                    <li><strong>Green/Blue areas:</strong> Lower concentration of available positions</li>
+                </ul>
+                <p>These visualizations can help you identify job hotspots and make informed decisions about job search or relocation.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">
+                <i class="fas fa-code"></i> Job Trends Analyzer & AI Predictor
+                <span class="mx-2">|</span>
+                <i class="fas fa-chart-bar"></i> Analyze job market trends with AI-powered insights
+            </p>
+            <div class="mt-3">
+                <a href="/" class="text-decoration-none me-3">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="/analyze" class="text-decoration-none me-3">
+                    <i class="fas fa-search"></i> Analyze
+                </a>
+                <a href="/predict" class="text-decoration-none me-3">
+                    <i class="fas fa-brain"></i> Predict
+                </a>
+                <a href="/heatmaps" class="text-decoration-none me-3">
+                    <i class="fas fa-map-marked-alt"></i> Maps
+                </a>
+                <a href="/wordcloud" class="text-decoration-none me-3">
+                    <i class="fas fa-cloud"></i> Skills
+                </a>
+                <a href="/charts" class="text-decoration-none">
+                    <i class="fas fa-chart-bar"></i> Charts
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div id="loader-container" class="loader-container">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup dark mode
+            setupDarkMode();
+            
+            // Initialize tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Show loader during ajax requests
+            const loader = document.getElementById('loader-container');
+            const indiaMapContainer = document.getElementById('india-map');
+            const worldMapContainer = document.getElementById('world-map');
+            const indiaMapLoading = document.getElementById('india-map-loading');
+            const worldMapLoading = document.getElementById('world-map-loading');
+            const indiaMapError = document.getElementById('india-map-error');
+            const worldMapError = document.getElementById('world-map-error');
+            const errorMessage = document.getElementById('error-message');
+            const errorText = document.getElementById('error-text');
+            
+            // Fetch map data
+            fetchMaps();
+            
+            function fetchMaps() {
+                showLoader();
+                
+                fetch('/api/maps')
+                    .then(response => response.json())
+                    .then(data => {
+                        hideLoader();
+                        
+                        if (data.error) {
+                            showError(data.error);
+                            return;
+                        }
+                        
+                        // Handle India map
+                        indiaMapLoading.style.display = 'none';
+                        if (data.india_map) {
+                            indiaMapContainer.classList.remove('d-none');
+                            indiaMapContainer.innerHTML = data.india_map;
+                        } else {
+                            indiaMapError.classList.remove('d-none');
+                        }
+                        
+                        // Handle World map
+                        worldMapLoading.style.display = 'none';
+                        if (data.world_map) {
+                            worldMapContainer.classList.remove('d-none');
+                            worldMapContainer.innerHTML = data.world_map;
+                        } else {
+                            worldMapError.classList.remove('d-none');
+                        }
+                    })
+                    .catch(error => {
+                        hideLoader();
+                        indiaMapLoading.style.display = 'none';
+                        worldMapLoading.style.display = 'none';
+                        showError('Error fetching map data: ' + error.message);
+                        console.error('Error:', error);
+                    });
+            }
+            
+            // Helper functions
+            function showError(message) {
+                errorText.textContent = message;
+                errorMessage.classList.remove('d-none');
+            }
+            
+            function hideError() {
+                errorMessage.classList.add('d-none');
+            }
+            
+            function showLoader() {
+                if (loader) {
+                    loader.style.display = 'flex';
+                }
+            }
+            
+            function hideLoader() {
+                if (loader) {
+                    loader.style.display = 'none';
+                }
+            }
+            
+            // Tab switching animation
+            const mapTabs = document.querySelectorAll('#mapTabs button');
+            mapTabs.forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function (e) {
+                    const targetId = e.target.getAttribute('data-bs-target');
+                    const targetPane = document.querySelector(targetId);
+                    
+                    if (targetPane) {
+                        targetPane.classList.add('animate__animated', 'animate__fadeIn');
+                        setTimeout(() => {
+                            targetPane.classList.remove('animate__animated', 'animate__fadeIn');
+                        }, 500);
+                    }
+                });
+            });
+            
+            // Setup dark mode
+            function setupDarkMode() {
+                const darkModeToggle = document.getElementById('darkModeToggle');
+                const body = document.body;
+                
+                // Check for saved dark mode preference
+                const darkMode = localStorage.getItem('darkMode') === 'true';
+                
+                // Apply initial dark mode setting
+                if (darkMode) {
+                    body.classList.add('dark-mode');
+                    darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+                
+                // Toggle dark mode on click
+                darkModeToggle.addEventListener('click', function() {
+                    body.classList.toggle('dark-mode');
+                    const isDarkMode = body.classList.contains('dark-mode');
+                    
+                    // Update button icon
+                    darkModeToggle.innerHTML = isDarkMode ? 
+                        '<i class="fas fa-sun"></i>' : 
+                        '<i class="fas fa-moon"></i>';
+                    
+                    // Save preference
+                    localStorage.setItem('darkMode', isDarkMode);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
